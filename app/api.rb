@@ -21,16 +21,15 @@ module ExpenseTracker
       end
     end
     get '/expenses/:date' do
-      if params[:date].nil?
-        JSON.generate([])
+      date = params[:date]
+      result = [{ 'payee' => 'Starbucks', 'amount' => 5.75,
+                  'date' => date }]
+      JSON.generate(result)
+    end
 
-      else
-        date = params[:date]
-        result = [{ 'payee' => 'Starbucks', 'amount' => 5.75,
-                    'date' => date }]
-        JSON.generate(result)
-
-      end
+    get '/expenses' do
+      status 200
+      JSON.generate([])
     end
   end
 end

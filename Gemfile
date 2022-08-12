@@ -12,3 +12,7 @@ gem 'eventmachine'
 gem 'thin'
 gem 'falcon'
 gem 'webrick'
+# db iteraction
+gem 'sequel'
+gem 'sqlite3'
+gem "ruby-lsp", "~> 0.2.2", :group => :development

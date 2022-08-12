@@ -79,14 +79,14 @@ module ExpenseTracker
       context 'when there are no expenses on the given date' do
         before do
           allow(ledger).to receive(:record)
-            .with(:date)
             .and_return(RecordResult.new([]))
         end
         it 'returns an empty array as JSON' do
-          get '/expenses/', JSON.generate([])
+          get '/expenses', JSON.generate([])
           expect(last_response.body).to include [].to_json
         end
         it 'responds with a 200 (OK)' do
+          get '/expenses'
           expect(last_response.status).to eq 200
         end
       end

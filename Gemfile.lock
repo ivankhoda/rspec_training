@@ -44,12 +44,14 @@ GEM
       samovar (~> 2.1)
     fiber-local (1.0.0)
     io-event (1.0.9)
+    language_server-protocol (3.16.0.3)
     localhost (1.1.9)
     mapping (1.1.1)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.8)
     openssl (3.0.0)
+    prettier_print (0.1.0)
     process-metrics (0.2.1)
       console (~> 1.8)
       samovar (~> 2.1)
@@ -80,15 +82,24 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
     rspec-support (3.11.0)
+    ruby-lsp (0.2.2)
+      language_server-protocol
+      sorbet-runtime
+      syntax_tree (>= 2.4)
     ruby2_keywords (0.0.5)
     samovar (2.1.4)
       console (~> 1.0)
       mapping (~> 1.0)
+    sequel (5.59.0)
     sinatra (2.2.2)
       mustermann (~> 2.0)
       rack (~> 2.2)
       rack-protection (= 2.2.2)
       tilt (~> 2.0)
+    sorbet-runtime (0.5.10323)
+    sqlite3 (1.4.4)
+    syntax_tree (3.3.0)
+      prettier_print
     thin (1.8.1)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -108,7 +119,10 @@ DEPENDENCIES
   puma
   rack-test
   rspec
+  ruby-lsp (~> 0.2.2)
+  sequel
   sinatra
+  sqlite3
   thin
   webrick
 
