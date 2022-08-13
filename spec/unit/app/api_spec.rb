@@ -59,19 +59,17 @@ module ExpenseTracker
     describe 'GET /expenses/:date' do
       context 'when expenses exist on the given date' do
         before do
-          allow(ledger).to receive(:record)
-            .with(:date)
-            .and_return(RecordResult.new([{ 'payee' => 'Starbucks', 'amount' => 5.75,
-                                            'date' => '2017-06-10' }]))
+          allow(ledger).to receive(:expenses_on)
+            .with('2017-06-10')
+            .and_return(RecordResult.new([]))
         end
         it 'returns the expense records as JSON' do
-          get '/expenses/2017-06-10'
-          expect(last_response.body).to include [{ 'payee' => 'Starbucks', 'amount' => 5.75,
-                                                   'date' => '2017-06-10' }].to_json
+          get '/expenses/2017-06-10', JSON.generate([])
+          expect(last_response.body).to include [].to_json
         end
 
         it 'responds with a 200 (OK)' do
-          get '/expenses/2017-06-10', JSON.generate(expense)
+          get '/expenses/2017-06-10'
           expect(last_response.status).to eq 200
         end
       end

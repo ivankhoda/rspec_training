@@ -22,8 +22,7 @@ module ExpenseTracker
     end
     get '/expenses/:date' do
       date = params[:date]
-      result = [{ 'payee' => 'Starbucks', 'amount' => 5.75,
-                  'date' => date }]
+      result = @ledger.expenses_on(date)
       JSON.generate(result)
     end
 
