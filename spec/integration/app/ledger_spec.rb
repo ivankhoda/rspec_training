@@ -47,5 +47,20 @@ module ExpenseTracker
         expect(ledger.expenses_on('2017-06-10')).to eq([])
       end
     end
+    describe 'get expense by id' do
+      context 'with a valid id' do
+        it 'returns an expense by given id' do
+          result = ledger.record(expense.merge('date' => '2022-08-14'))
+          expect(ledger.get_expense(10)).to contain_exactly(a_hash_including(id: result.expense_id))
+        end
+      end
+
+      context 'with an invalid id' do
+        it 'return message when invalid expense id was provided' do
+          by_non_existing_id = 0o1
+          expect(ledger.get_expense(by_non_existing_id).count).to eq(0)
+        end
+      end
+    end
   end
 end

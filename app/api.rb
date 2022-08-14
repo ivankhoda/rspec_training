@@ -26,6 +26,12 @@ module ExpenseTracker
       JSON.generate(result)
     end
 
+    get '/expense/:id' do
+      id = params[:id]
+      expense = @ledger.get_expense(id)
+      JSON.generate(expense)
+    end
+
     get '/expenses' do
       status 200
       JSON.generate([])

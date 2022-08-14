@@ -16,5 +16,9 @@ module ExpenseTracker
     def expenses_on(date)
       DB[:expenses].where(date: date).all
     end
+
+    def get_expense(id)
+      DB[:expenses].where(id: id).all
+    end
   end
 end

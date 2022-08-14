@@ -3,7 +3,14 @@ require 'rack/test'
 
 module ExpenseTracker
   RecordResult = Struct.new(:success?, :expense_id, :error_message)
+
   RSpec.describe API do
+    let(:expense) do
+      {
+        'payee' => 'Starbucks', 'amount' => 5.75,
+        'date' => '2017-06-10', 'id' => '10'
+      }
+    end
     include Rack::Test::Methods
     def app
       API.new(ledger: ledger)
@@ -14,13 +21,12 @@ module ExpenseTracker
       parsed = JSON.parse(last_response.body)
     end
 
-    def get_data
-      get '/expenses', JSON.generate(expense)
+    def parse_data
+      JSON.generate(expense)
       parsed = JSON.parse(last_response.body)
     end
 
     let(:ledger) { instance_double('ExpenseTracker::Ledger') }
-    let(:expense) { { 'some' => 'data' } }
 
     describe 'POST /expenses' do
       context 'when the expense is successfully recorded' do
@@ -64,7 +70,7 @@ module ExpenseTracker
             .and_return(RecordResult.new([]))
         end
         it 'returns the expense records as JSON' do
-          get '/expenses/2017-06-10', JSON.generate([])
+          get '/expenses/2017-06-10', JSON.generate([expense])
           expect(last_response.body).to include [].to_json
         end
 
@@ -85,6 +91,40 @@ module ExpenseTracker
         end
         it 'responds with a 200 (OK)' do
           get '/expenses'
+          expect(last_response.status).to eq 200
+        end
+      end
+    end
+    describe 'GET /expense/10' do
+      context 'when expense with id exists' do
+        before do
+          allow(ledger).to receive(:get_expense)
+            .with(
+              '10'
+            )
+            .and_return(expense)
+        end
+        it 'returns the expense record as json' do
+          get '/expense/10'
+          expect(parse_data).to include('id' => '10')
+        end
+        it 'responds with a 200 (OK)' do
+          get '/expense/10'
+          expect(last_response.status).to eq 200
+        end
+      end
+      context 'when expense with id does not exist' do
+        before do
+          allow(ledger).to receive(:get_expense)
+            .with('11a')
+            .and_return([])
+        end
+        it 'returns an empty array' do
+          get '/expense/11a'
+          expect(last_response.body).to eq([].to_json)
+        end
+        it 'respond with 200' do
+          get '/expense/11a'
           expect(last_response.status).to eq 200
         end
       end
