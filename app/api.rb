@@ -9,7 +9,6 @@ module ExpenseTracker
       super()
     end
     post '/expenses' do
-      # JSON.generate('expense_id' => 42)
       expense = JSON.parse(request.body.read)
       result = @ledger.record(expense)
 

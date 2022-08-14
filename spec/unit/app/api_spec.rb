@@ -42,6 +42,7 @@ module ExpenseTracker
 
         it 'responds with a 200 (OK)' do
           post_data
+
           expect(last_response.status).to eq(200)
         end
       end
@@ -95,7 +96,7 @@ module ExpenseTracker
         end
       end
     end
-    describe 'GET /expense/10' do
+    describe 'GET /expense/:id' do
       context 'when expense with id exists' do
         before do
           allow(ledger).to receive(:get_expense)
@@ -126,6 +127,20 @@ module ExpenseTracker
         it 'respond with 200' do
           get '/expense/11a'
           expect(last_response.status).to eq 200
+        end
+      end
+    end
+    describe 'PATCH /expense/:id' do
+      context 'patch expense with correct id' do
+        it 'patches expense with correct id' do
+        end
+        it 'response with 200' do
+        end
+      end
+      context 'patch expense with incorrect id' do
+        it 'return a 404 error when expense id is incorrect' do
+          pending 'TBD' do
+          end
         end
       end
     end
