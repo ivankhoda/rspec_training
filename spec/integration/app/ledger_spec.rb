@@ -62,5 +62,27 @@ module ExpenseTracker
         end
       end
     end
+    describe 'patch expense' do
+      context 'with a valid id' do
+        it 'returns patched expense' do
+          result = ledger.record(expense.merge('date' => '2022-08-16', 'amount' => '6'))
+          ledger.patch_expense(result.expense_id, { 'amount' => 7.00, 'date' => '2022-08-16' })
+          expect(DB[:expenses].all).to match [a_hash_including(
+            id: result.expense_id,
+            payee: 'Starbucks',
+            amount: 7.00,
+            date: Date.iso8601('2022-08-16')
+          )]
+        end
+      end
+      context 'returns error message if expense not found' do
+        it 'returns error message' do
+          non_existing_id = 0o1
+          result = ledger.patch_expense(non_existing_id, { 'amount' => 7.00, 'date' => '2022-08-16' })
+          expect(result.error_message).to include("Invalid expense id: #{non_existing_id} is not exists")
+          expect(DB[:expenses].count).to eq(0)
+        end
+      end
+    end
   end
 end

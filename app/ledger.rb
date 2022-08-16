@@ -1,7 +1,7 @@
 require_relative '../config/sequel'
 
 module ExpenseTracker
-  RecordResult = Struct.new(:success?, :expense_id, :error_message)
+  RecordResult = Struct.new(:success?, :expense_id, :error_message, :params)
   class Ledger
     def record(expense)
       unless expense.key?('payee')
@@ -19,6 +19,16 @@ module ExpenseTracker
 
     def get_expense(id)
       DB[:expenses].where(id: id).all
+    end
+
+    def patch_expense(id, params)
+      expense = DB[:expenses].where(id: id)
+      if !expense.first.nil?
+        expense.update(params)
+      else
+        message = "Invalid expense id: #{id} is not exists"
+        RecordResult.new(false, nil, message)
+      end
     end
   end
 end

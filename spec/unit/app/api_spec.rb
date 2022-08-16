@@ -132,15 +132,24 @@ module ExpenseTracker
     end
     describe 'PATCH /expense/:id' do
       context 'patch expense with correct id' do
-        it 'patches expense with correct id' do
+        before do
+          allow(ledger).to receive(:patch_expense)
+            .with('10', { amount: 5.00.to_f, payee: 'Lolbucks', date: '2022-08-17' })
+            .and_return(expense.merge!({ 'amount' => 5.00.to_f, 'payee' => 'Lolbucks', 'date' => '2022-08-17' }))
         end
-        it 'response with 200' do
+        it 'patches expense with correct id' do
+          expense_id = '10'
+          put "/expense/#{expense_id}", expense: { amount: 5.0.to_f, payee: 'Lolbucks', date: '2022-08-17' }
+          expect(last_response.status).to eq 200
+          expect(last_response.body).to include('"amount", 5.0')
         end
       end
+
+      # end
       context 'patch expense with incorrect id' do
         it 'return a 404 error when expense id is incorrect' do
-          pending 'TBD' do
-          end
+          #     #   pending 'Need to persist expenses'
+          #     #   expect(last_response.status).to eq 404
         end
       end
     end

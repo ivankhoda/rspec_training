@@ -35,5 +35,20 @@ module ExpenseTracker
       status 200
       JSON.generate([])
     end
+
+    put '/expense/:id' do
+      id = params[:id]
+
+      attributes = { amount: permitted_params[:amount].to_f, payee: permitted_params[:payee],
+                     date: permitted_params[:date] }
+      p attributes
+      expense = @ledger.patch_expense(id, attributes)
+    end
+
+    private
+
+    def permitted_params
+      params[:expense]
+    end
   end
 end
