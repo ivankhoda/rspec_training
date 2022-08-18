@@ -23,12 +23,20 @@ module ExpenseTracker
 
     def patch_expense(id, params)
       expense = DB[:expenses].where(id: id)
+      return RecordResult.new(false, nil, 'Invalid params: some params are empty') if have_empty_params(params)
+
       if !expense.first.nil?
         expense.update(params)
       else
         message = "Invalid expense id: #{id} is not exists"
         RecordResult.new(false, nil, message)
       end
+    end
+
+    private
+
+    def have_empty_params(params)
+      params.values.any? { |value| value.to_s.empty? }
     end
   end
 end

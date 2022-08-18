@@ -148,8 +148,7 @@ module ExpenseTracker
       # end
       context 'patch expense with incorrect id' do
         it 'return a 404 error when expense id is incorrect' do
-          #     #   pending 'Need to persist expenses'
-          #     #   expect(last_response.status).to eq 404
+
         end
       end
     end

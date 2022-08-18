@@ -83,6 +83,14 @@ module ExpenseTracker
           expect(DB[:expenses].count).to eq(0)
         end
       end
+      context 'with empty body' do
+        it 'refuse to patch if body is empty' do
+          exp = ledger.record(expense.merge('date' => '2022-08-16', 'amount' => '6'))
+          result = ledger.patch_expense(exp.expense_id, { 'amount' => '', 'date' => '' })
+
+          expect(result.error_message).to include('Invalid params: some params are empty')
+        end
+      end
     end
   end
 end

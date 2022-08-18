@@ -41,7 +41,7 @@ module ExpenseTracker
 
       attributes = { amount: permitted_params[:amount].to_f, payee: permitted_params[:payee],
                      date: permitted_params[:date] }
-      p attributes
+
       expense = @ledger.patch_expense(id, attributes)
     end
 
