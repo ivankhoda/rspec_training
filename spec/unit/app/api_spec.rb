@@ -133,6 +133,11 @@ module ExpenseTracker
     describe 'PATCH /expense/:id' do
       context 'patch expense with correct id' do
         before do
+          allow(ledger).to receive(:get_expense)
+            .with(
+              '10'
+            )
+            .and_return(expense)
           allow(ledger).to receive(:patch_expense)
             .with('10', { amount: 5.00.to_f, payee: 'Lolbucks', date: '2022-08-17' })
             .and_return(expense.merge!({ 'amount' => 5.00.to_f, 'payee' => 'Lolbucks', 'date' => '2022-08-17' }))
@@ -141,14 +146,26 @@ module ExpenseTracker
           expense_id = '10'
           put "/expense/#{expense_id}", expense: { amount: 5.0.to_f, payee: 'Lolbucks', date: '2022-08-17' }
           expect(last_response.status).to eq 200
-          expect(last_response.body).to include('"amount", 5.0')
+          expect(last_response.body).to eql(expense.to_json)
         end
       end
 
       # end
       context 'patch expense with incorrect id' do
+        before do
+          allow(ledger).to receive(:get_expense)
+            .with(
+              '11f'
+            )
+            .and_return([])
+          allow(ledger).to receive(:patch_expense)
+            .with('11f', { amount: 5.00.to_f, payee: 'Lolbucks', date: '2022-08-17' })
+            .and_return([])
+        end
         it 'return a 404 error when expense id is incorrect' do
-
+          expense_id = '11f'
+          put "/expense/#{expense_id}", expense: { amount: 5.0.to_f, payee: 'Lolbucks', date: '2022-08-17' }
+          expect(last_response.status).to eq 404
         end
       end
     end

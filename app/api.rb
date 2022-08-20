@@ -38,11 +38,18 @@ module ExpenseTracker
 
     put '/expense/:id' do
       id = params[:id]
+      expense = @ledger.get_expense(id)
+      if !expense.empty?
 
-      attributes = { amount: permitted_params[:amount].to_f, payee: permitted_params[:payee],
-                     date: permitted_params[:date] }
+        attributes = { amount: permitted_params[:amount].to_f, payee: permitted_params[:payee],
+                       date: permitted_params[:date] }
 
-      expense = @ledger.patch_expense(id, attributes)
+        expense = @ledger.patch_expense(id, attributes)
+        JSON.generate(expense)
+      else
+        status 404
+        JSON.generate([])
+      end
     end
 
     private
